@@ -1,17 +1,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="demoApp">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1; user-scalable=no">
-<title>无标题文档</title>
+<title>module测试</title>
 <link rel="stylesheet" href="bootstrap-3.2.0-dist/css/bootstrap.min.css" />
 </head>
 
-<body ng-app>
+<body ng-controller="simpleController">
 <div class="container">
-<h2></h2>	
+	<h2 class="text-center">module测试</h2>	
 
-
+	<label>input a filter:	<input type="text" ng-model="bossName" class="form-control" /></label> 
+	<div class="well">
+		<ul>
+			<li ng-repeat="people in BOSS | filter: bossName">{{ people.name | uppercase }} - {{ people.city }}</li>
+		</ul>
+	</div>
 
 </div>
 
@@ -19,7 +24,32 @@
 <script type="text/javascript">
 'use strict'
 
+// 定义一个 module，参数里的空数组表示不需要基于其他module，如果有需要可以引入其他module
+var demoApp = angular.module('demoApp', [])
 
+demoApp.config(function($routeProvider){
+	$routeProvider.when('/', {
+		controller: 'SimpleController',
+		templateUrl: 'Partials/View1.html'
+	}).when('/partial2',{
+		controller: 'SimpleController',
+		templateUrl: 'Partials/View2.html'
+	}).otherwise({
+		redirectTo: '/'
+	})
+})
+
+function simpleController($scope){
+	$scope.BOSS = [	
+		{name: 'zqq', city: 'ningbo'},
+		{name: 'cjy', city: 'hongkong'},
+		{name: 'zt', city: 'Australia'}
+	]
+}
+
+// 在这个 module里定义一个 controller,可以把module当成一个对象来看吧
+// 这里直接把上面定义的一个函数给到 demoApp.controller里了
+demoApp.controller('simpleController', simpleController)
 
 </script>
 
